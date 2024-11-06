@@ -1,0 +1,16 @@
+spring:
+
+  application:
+    name: chat-app
+
+  data:
+    mongodb:
+      username: capellax
+      password: 123456
+      host: localhost
+      port: 27017
+      database: chat_app_db
+      authentication-database: admin
+
+server:
+  port: 8088
