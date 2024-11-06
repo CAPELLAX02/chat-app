@@ -5,12 +5,13 @@ spring:
 
   data:
     mongodb:
-      username: capellax
-      password: 123456
-      host: localhost
-      port: 27017
-      database: chat_app_db
-      authentication-database: admin
+      uri: mongodb://capellax:123456@localhost:27017/chat_app_db?authSource=admin
+#      username: capellax
+#      password: 123456
+#      host: localhost
+#      port: 27017
+#      database: chat_app_db
+#      authentication-database: admin
 
 server:
   port: 8088

@@ -15,32 +15,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatController {
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
     private final ChatMessageService chatMessageService;
 
     @MessageMapping("/chat")
     public void processMessage(
             @Payload ChatMessage chatMessage
     ) {
-        ChatMessage savedChatMessage = chatMessageService.save(chatMessage);
-        simpMessagingTemplate.convertAndSendToUser(
-                chatMessage.getRecipientId(),
-                "/queue/messages",
-                ChatNotification.builder()
-                        .id(savedChatMessage.getId())
-                        .senderId(savedChatMessage.getSenderId())
-                        .recipientId(savedChatMessage.getRecipientId())
-                        .content(savedChatMessage.getContent())
-                        .build()
+        ChatMessage savedMsg = chatMessageService.save(chatMessage);
+        messagingTemplate.convertAndSendToUser(
+                chatMessage.getRecipientId(), "/queue/messages",
+                new ChatNotification(
+                        savedMsg.getId(),
+                        savedMsg.getSenderId(),
+                        savedMsg.getRecipientId(),
+                        savedMsg.getContent()
+                )
         );
     }
 
     @GetMapping("/messages/{senderId}/{recipientId}")
-    public ResponseEntity<List<ChatMessage>> getChatMessages(
+    public ResponseEntity<List<ChatMessage>> findChatMessages(
             @PathVariable String senderId,
             @PathVariable String recipientId
     ) {
-        return ResponseEntity.ok(chatMessageService.findChatMessages(senderId, recipientId));
+        return ResponseEntity
+                .ok(chatMessageService.findChatMessages(senderId, recipientId));
     }
 
 }

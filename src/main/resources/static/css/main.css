@@ -41,6 +41,11 @@ body {
 .users-list-container {
     height: 100%;
     overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.users-list-container::-webkit-scrollbar {
+    display: none;
 }
 
 .users-list h2 {

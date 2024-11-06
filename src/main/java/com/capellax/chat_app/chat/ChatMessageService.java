@@ -14,33 +14,18 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomService chatRoomService;
 
-    public ChatMessage save(
-            ChatMessage chatMessage
-    ) {
-        var chatId = chatRoomService.getChatRoomId(
-                chatMessage.getChatId(),
-                chatMessage.getRecipientId(),
-                true
-        ).orElseThrow(() -> new RuntimeException("Chat room not found"));
-
+    public ChatMessage save(ChatMessage chatMessage) {
+        var chatId = chatRoomService
+                .getChatRoomId(chatMessage.getSenderId(), chatMessage.getRecipientId(), true)
+                .orElseThrow(() -> new RuntimeException("Chat room not found"));
         chatMessage.setChatId(chatId);
         chatMessageRepository.save(chatMessage);
         return chatMessage;
     }
 
-    public List<ChatMessage> findChatMessages(
-            String senderId,
-            String recipientId
-    ) {
-        var chatId = chatRoomService.getChatRoomId(
-                senderId,
-                recipientId,
-                false
-        );
-
-        return chatId
-                .map(chatMessageRepository::findByChatId)
-                .orElse(new ArrayList<>());
+    public List<ChatMessage> findChatMessages(String senderId, String recipientId) {
+        var chatId = chatRoomService.getChatRoomId(senderId, recipientId, false);
+        return chatId.map(chatMessageRepository::findByChatId).orElse(new ArrayList<>());
     }
 
 }

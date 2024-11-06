@@ -17,7 +17,7 @@ public class UserController {
     private final UserService userService;
 
     @MessageMapping("/user.addUser")
-    @SendTo("/user/topic") // queue to be notified
+    @SendTo("/user/public")
     public User addUser(
             @Payload User user
     ) {
@@ -25,17 +25,17 @@ public class UserController {
         return user;
     }
 
-    @MessageMapping("/user.disconnect")
-    @SendTo("/user/topic")
-    public User disconnect(
+    @MessageMapping("/user.disconnectUser")
+    @SendTo("/user/public")
+    public User disconnectUser(
             @Payload User user
     ) {
         userService.disconnect(user);
         return user;
     }
 
-    @GetMapping("/users/")
-    public ResponseEntity<List<User>> getConnectedUsers() {
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> findConnectedUsers() {
         return ResponseEntity.ok(userService.findConnectedUsers());
     }
 
