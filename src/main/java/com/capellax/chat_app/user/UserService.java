@@ -26,7 +26,7 @@ public class UserService {
                 .orElse(null);
 
         if (storedUser != null) {
-            user.setStatus(Status.OFLINE);
+            user.setStatus(Status.OFFLINE);
             userRepository.save(storedUser);
         }
     }
